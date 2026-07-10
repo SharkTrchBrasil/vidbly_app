@@ -16,6 +16,7 @@ import '../../presentation/brand/wizard/step_2_video_screen.dart';
 import '../../presentation/brand/wizard/step_3_addons_screen.dart';
 import '../../presentation/brand/wizard/step_4_visibility_screen.dart';
 import '../../presentation/brand/wizard/step_5_checkout_screen.dart';
+import '../../presentation/auth/brand_form_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -48,6 +49,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/creator-form',
         builder: (context, state) => const CreatorFormScreen(),
+      ),
+      GoRoute(
+        path: '/brand-form',
+        builder: (context, state) => const BrandFormScreen(),
       ),
       GoRoute(
         path: '/pitch-video',

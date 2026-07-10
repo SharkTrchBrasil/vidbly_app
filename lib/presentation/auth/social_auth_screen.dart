@@ -61,11 +61,11 @@ class SocialAuthScreen extends StatelessWidget {
                       if (role == 'creator') {
                         context.push('/creator-form');
                       } else {
-                        context.push('/dashboard');
+                        context.push('/brand-form');
                       }
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Erro: \$e'), backgroundColor: Colors.red),
+                        SnackBar(content: Text('Erro: $e'), backgroundColor: Colors.red),
                       );
                     }
                   },
@@ -81,7 +81,7 @@ class SocialAuthScreen extends StatelessWidget {
                 if (role == 'creator') {
                   context.push('/creator-form');
                 } else {
-                  context.push('/dashboard');
+                  context.push('/brand-form');
                 }
               },
               style: ElevatedButton.styleFrom(
