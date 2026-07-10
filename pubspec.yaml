@@ -48,6 +48,7 @@ dependencies:
   sign_in_with_apple: ^8.1.0
   firebase_core: ^4.11.0
   firebase_auth: ^6.5.4
+  flutter_dotenv: ^6.0.1
 
 dev_dependencies:
   flutter_test:
