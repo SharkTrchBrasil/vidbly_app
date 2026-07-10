@@ -1,0 +1,9 @@
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: assets/images/logo.jpg
+  android: true
+  ios: true
+
+  # Opcionalmente, pode adicionar darkMode se o app suportar
+  color_dark: "#121212"
+  image_dark: assets/images/logo.jpg

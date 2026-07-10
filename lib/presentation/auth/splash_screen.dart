@@ -33,16 +33,13 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Dummy SVG / Icon for Swappy aesthetic
-            const Icon(Icons.play_circle_fill, size: 100, color: AppTheme.primary),
-            const SizedBox(height: 24),
-            Text(
-              'VIDBLY',
-              style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                    color: AppTheme.primary,
-                    letterSpacing: 4.0,
-                  ),
+            Image.asset(
+              'assets/images/logo.jpg',
+              width: 150,
+              height: 150,
             ),
+            const SizedBox(height: 16),
+            const CircularProgressIndicator(),
           ],
         ),
       ),
