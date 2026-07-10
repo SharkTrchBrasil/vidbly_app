@@ -8,6 +8,8 @@ import '../../presentation/auth/role_selection_screen.dart';
 import '../../presentation/auth/social_auth_screen.dart';
 import '../../presentation/auth/creator_form_screen.dart';
 import '../../presentation/auth/pitch_video_upload_screen.dart';
+import '../../presentation/creator/main_creator_screen.dart';
+import '../../presentation/brand/main_brand_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -45,12 +47,13 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/pitch-video',
         builder: (context, state) => const PitchVideoUploadScreen(),
       ),
-      // Dummy dashboard route for now
       GoRoute(
-        path: '/dashboard',
-        builder: (context, state) => const Scaffold(
-          body: Center(child: Text("Dashboard (Em Breve)")),
-        ),
+        path: '/creator-dashboard',
+        builder: (context, state) => const MainCreatorScreen(),
+      ),
+      GoRoute(
+        path: '/brand-dashboard',
+        builder: (context, state) => const MainBrandScreen(),
       ),
     ],
   );
