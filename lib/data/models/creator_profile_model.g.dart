@@ -1,0 +1,131 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'creator_profile_model.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_CreatorProfileModel _$CreatorProfileModelFromJson(Map<String, dynamic> json) =>
+    _CreatorProfileModel(
+      id: json['id'] as String,
+      userId: json['userId'] as String,
+      firstName: json['firstName'] as String,
+      lastName: json['lastName'] as String,
+      avatarUrl: json['avatarUrl'] as String?,
+      pitchVideoUrl: json['pitchVideoUrl'] as String?,
+      bio: json['bio'] as String?,
+      dateOfBirth: json['dateOfBirth'] == null
+          ? null
+          : DateTime.parse(json['dateOfBirth'] as String),
+      gender: json['gender'] as String?,
+      phone: json['phone'] as String?,
+      emailPublic: json['emailPublic'] as String?,
+      cpf: json['cpf'] as String?,
+      instagram: json['instagram'] as String?,
+      tiktok: json['tiktok'] as String?,
+      youtube: json['youtube'] as String?,
+      socialLinks: json['socialLinks'] as Map<String, dynamic>?,
+      categories: (json['categories'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      languages: (json['languages'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      portfolioUrls: (json['portfolioUrls'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      hourlyRate: (json['hourlyRate'] as num?)?.toDouble(),
+      responseTimeHours: (json['responseTimeHours'] as num?)?.toInt(),
+      onTimeDeliveryPercentage:
+          (json['onTimeDeliveryPercentage'] as num?)?.toInt() ?? 100,
+      premiumStatus: json['premiumStatus'] as String?,
+      countryCode: (json['countryCode'] as num?)?.toInt(),
+      favoritedByBrand: json['favoritedByBrand'] as bool? ?? false,
+      invited: json['invited'] as bool? ?? false,
+      matchCount: (json['matchCount'] as num?)?.toInt() ?? 0,
+      occupation: json['occupation'] as String?,
+      deliveryTimeAverageDays: (json['deliveryTimeAverageDays'] as num?)
+          ?.toDouble(),
+      rankedSlotsCount: (json['rankedSlotsCount'] as num?)?.toInt(),
+      preferredCurrency: json['preferredCurrency'] as String? ?? "BRL",
+      performanceCtr: (json['performanceCtr'] as num?)?.toDouble(),
+      performanceHookRate: (json['performanceHookRate'] as num?)?.toDouble(),
+      performanceRoas: (json['performanceRoas'] as num?)?.toDouble(),
+      followersCount: (json['followersCount'] as num?)?.toInt(),
+      viewsPerReel: (json['viewsPerReel'] as num?)?.toInt(),
+      organicPostPrice: (json['organicPostPrice'] as num?)?.toDouble(),
+      costPerView: (json['costPerView'] as num?)?.toDouble(),
+      partnershipAdsPrice: (json['partnershipAdsPrice'] as num?)?.toDouble(),
+      availabilityStatus: json['availabilityStatus'] as String? ?? "available",
+      pixKey: json['pixKey'] as String?,
+      pixKeyType: json['pixKeyType'] as String?,
+      city: json['city'] as String?,
+      state: json['state'] as String?,
+      rating: (json['rating'] as num).toDouble(),
+      completedJobs: (json['completedJobs'] as num).toInt(),
+      totalEarned: (json['totalEarned'] as num).toDouble(),
+      stripeAccountId: json['stripeAccountId'] as String?,
+      stripeAccountStatus: json['stripeAccountStatus'] as String? ?? "pending",
+      stripeOnboardingComplete:
+          json['stripeOnboardingComplete'] as bool? ?? false,
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      updatedAt: DateTime.parse(json['updatedAt'] as String),
+    );
+
+Map<String, dynamic> _$CreatorProfileModelToJson(
+  _CreatorProfileModel instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'userId': instance.userId,
+  'firstName': instance.firstName,
+  'lastName': instance.lastName,
+  'avatarUrl': instance.avatarUrl,
+  'pitchVideoUrl': instance.pitchVideoUrl,
+  'bio': instance.bio,
+  'dateOfBirth': instance.dateOfBirth?.toIso8601String(),
+  'gender': instance.gender,
+  'phone': instance.phone,
+  'emailPublic': instance.emailPublic,
+  'cpf': instance.cpf,
+  'instagram': instance.instagram,
+  'tiktok': instance.tiktok,
+  'youtube': instance.youtube,
+  'socialLinks': instance.socialLinks,
+  'categories': instance.categories,
+  'languages': instance.languages,
+  'portfolioUrls': instance.portfolioUrls,
+  'hourlyRate': instance.hourlyRate,
+  'responseTimeHours': instance.responseTimeHours,
+  'onTimeDeliveryPercentage': instance.onTimeDeliveryPercentage,
+  'premiumStatus': instance.premiumStatus,
+  'countryCode': instance.countryCode,
+  'favoritedByBrand': instance.favoritedByBrand,
+  'invited': instance.invited,
+  'matchCount': instance.matchCount,
+  'occupation': instance.occupation,
+  'deliveryTimeAverageDays': instance.deliveryTimeAverageDays,
+  'rankedSlotsCount': instance.rankedSlotsCount,
+  'preferredCurrency': instance.preferredCurrency,
+  'performanceCtr': instance.performanceCtr,
+  'performanceHookRate': instance.performanceHookRate,
+  'performanceRoas': instance.performanceRoas,
+  'followersCount': instance.followersCount,
+  'viewsPerReel': instance.viewsPerReel,
+  'organicPostPrice': instance.organicPostPrice,
+  'costPerView': instance.costPerView,
+  'partnershipAdsPrice': instance.partnershipAdsPrice,
+  'availabilityStatus': instance.availabilityStatus,
+  'pixKey': instance.pixKey,
+  'pixKeyType': instance.pixKeyType,
+  'city': instance.city,
+  'state': instance.state,
+  'rating': instance.rating,
+  'completedJobs': instance.completedJobs,
+  'totalEarned': instance.totalEarned,
+  'stripeAccountId': instance.stripeAccountId,
+  'stripeAccountStatus': instance.stripeAccountStatus,
+  'stripeOnboardingComplete': instance.stripeOnboardingComplete,
+  'createdAt': instance.createdAt.toIso8601String(),
+  'updatedAt': instance.updatedAt.toIso8601String(),
+};

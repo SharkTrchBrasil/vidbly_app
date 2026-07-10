@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "270521837504",
+    "project_id": "vidble-60ea4",
+    "storage_bucket": "vidble-60ea4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:270521837504:android:cc96954bfd54605abc4a25",
+        "android_client_info": {
+          "package_name": "com.vidbly.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "270521837504-g2qso3m4uv7fuhk124v3jtp61985iiej.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8P0EEF-Uw2ml4e1AGnwDEcGVX10_P7rE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "270521837504-g2qso3m4uv7fuhk124v3jtp61985iiej.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
