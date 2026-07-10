@@ -10,6 +10,8 @@ import '../../presentation/auth/creator_form_screen.dart';
 import '../../presentation/auth/pitch_video_upload_screen.dart';
 import '../../presentation/creator/main_creator_screen.dart';
 import '../../presentation/brand/main_brand_screen.dart';
+import '../../presentation/brand/creator_profile_screen.dart';
+import '../../presentation/brand/create_campaign_wizard.dart';
 import '../../presentation/brand/wizard/step_0_platform_screen.dart';
 import '../../presentation/brand/wizard/step_1_product_screen.dart';
 import '../../presentation/brand/wizard/step_2_video_screen.dart';
@@ -65,6 +67,14 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/brand-dashboard',
         builder: (context, state) => const MainBrandScreen(),
+      ),
+      GoRoute(
+        path: '/creator-profile',
+        builder: (context, state) => const CreatorProfileScreen(),
+      ),
+      GoRoute(
+        path: '/create-campaign',
+        builder: (context, state) => const CreateCampaignWizard(),
       ),
       GoRoute(
         path: '/brand-dashboard/wizard/step0',

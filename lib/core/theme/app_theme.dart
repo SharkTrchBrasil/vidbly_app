@@ -102,7 +102,7 @@ class AppTheme {
         ),
         hintStyle: GoogleFonts.inter(color: const Color(0xFF9CA3AF)),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         elevation: 0,
         color: surface,
         shape: RoundedRectangleBorder(

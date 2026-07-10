@@ -1,0 +1,39 @@
+{
+    "@@locale": "en",
+    "onDemandUGC": "On-demand UGC made easy",
+    "@onDemandUGC": {
+        "description": "Main title on the role selection screen"
+    },
+    "signIn": "Sign in",
+    "@signIn": {
+        "description": "Sign in button text"
+    },
+    "createAccount": "Register as a Creator",
+    "@createAccount": {
+        "description": "Create account link text"
+    },
+    "howToUse": "How do you want to use Vidbly?",
+    "@howToUse": {
+        "description": "Title of the bottom sheet"
+    },
+    "chooseAccountType": "Choose the account type that best fits you.",
+    "@chooseAccountType": {
+        "description": "Subtitle of the bottom sheet"
+    },
+    "imABrand": "I'm a Brand",
+    "@imABrand": {
+        "description": "Brand option title"
+    },
+    "connectWithCreators": "Connect with UGC creators",
+    "@connectWithCreators": {
+        "description": "Brand option subtitle"
+    },
+    "imACreator": "I'm a Creator",
+    "@imACreator": {
+        "description": "Creator option title"
+    },
+    "monetizeContent": "Monetize your content",
+    "@monetizeContent": {
+        "description": "Creator option subtitle"
+    }
+}

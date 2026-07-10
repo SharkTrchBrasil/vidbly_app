@@ -15,9 +15,19 @@ class _CreatorFormScreenState extends State<CreatorFormScreen> {
   String? _selectedCountry;
   String? _selectedGender;
   final TextEditingController _dobController = TextEditingController();
+  final TextEditingController _countryController = TextEditingController();
+  final TextEditingController _genderController = TextEditingController();
 
   final List<String> _countries = ['Brasil', 'Estados Unidos', 'Portugal', 'Outro'];
   final List<String> _genders = ['Masculino', 'Feminino', 'Outro', 'Prefiro não dizer'];
+
+  @override
+  void dispose() {
+    _dobController.dispose();
+    _countryController.dispose();
+    _genderController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,12 +65,17 @@ class _CreatorFormScreenState extends State<CreatorFormScreen> {
                       // Country Dropdown
                       Text("Onde você mora?", style: Theme.of(context).textTheme.labelLarge),
                       const SizedBox(height: 8),
-                      DropdownButtonFormField<String>(
-                        decoration: const InputDecoration(hintText: "Selecione o país"),
-                        value: _selectedCountry,
-                        items: _countries.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
-                        onChanged: (val) => setState(() => _selectedCountry = val),
-                        validator: (val) => val == null ? "Obrigatório" : null,
+                      TextFormField(
+                        controller: _countryController,
+                        readOnly: true,
+                        decoration: const InputDecoration(
+                          hintText: "Selecione o país",
+                          suffixIcon: Icon(Icons.arrow_drop_down),
+                        ),
+                        onTap: () {
+                          _showBottomSheetPicker('Onde você mora?', _countries, _countryController, (val) => _selectedCountry = val);
+                        },
+                        validator: (val) => val == null || val.isEmpty ? "Obrigatório" : null,
                       ),
                       const SizedBox(height: 24),
                       
@@ -81,12 +96,17 @@ class _CreatorFormScreenState extends State<CreatorFormScreen> {
                       // Gender Dropdown
                       Text("Gênero", style: Theme.of(context).textTheme.labelLarge),
                       const SizedBox(height: 8),
-                      DropdownButtonFormField<String>(
-                        decoration: const InputDecoration(hintText: "Selecione"),
-                        value: _selectedGender,
-                        items: _genders.map((g) => DropdownMenuItem(value: g, child: Text(g))).toList(),
-                        onChanged: (val) => setState(() => _selectedGender = val),
-                        validator: (val) => val == null ? "Obrigatório" : null,
+                      TextFormField(
+                        controller: _genderController,
+                        readOnly: true,
+                        decoration: const InputDecoration(
+                          hintText: "Selecione",
+                          suffixIcon: Icon(Icons.arrow_drop_down),
+                        ),
+                        onTap: () {
+                          _showBottomSheetPicker('Gênero', _genders, _genderController, (val) => _selectedGender = val);
+                        },
+                        validator: (val) => val == null || val.isEmpty ? "Obrigatório" : null,
                       ),
                     ],
                   ),
@@ -107,6 +127,50 @@ class _CreatorFormScreenState extends State<CreatorFormScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  void _showBottomSheetPicker(String title, List<String> items, TextEditingController controller, Function(String) onSelected) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (context) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                ),
+                Flexible(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: items.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(items[index]),
+                        onTap: () {
+                          setState(() {
+                            controller.text = items[index];
+                          });
+                          onSelected(items[index]);
+                          Navigator.pop(context);
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

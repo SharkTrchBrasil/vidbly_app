@@ -17,9 +17,13 @@ class _BrandFormScreenState extends State<BrandFormScreen> {
   String _country = 'Brasil';
   String? _jobRole;
 
-  final List<String> _businessTypes = ['Agency', 'Single Brand', 'Multi-Brand Company'];
-  final List<String> _countries = ['Brasil', 'United States', 'Portugal', 'United Kingdom', 'Canada'];
-  final List<String> _roles = ['Founder / Owner', 'Marketing Manager', 'Creative Director', 'Other'];
+  final _businessTypeController = TextEditingController();
+  final _countryController = TextEditingController(text: 'Brasil');
+  final _jobRoleController = TextEditingController();
+
+  final List<String> _businessTypes = ['Marca Própria', 'Agência', 'Empresa Multi-Marca'];
+  final List<String> _countries = ['Brasil', 'Estados Unidos', 'Portugal', 'Espanha', 'Outro'];
+  final List<String> _roles = ['Fundador / CEO', 'Gerente de Marketing', 'Diretor Criativo', 'Outro'];
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
@@ -31,6 +35,9 @@ class _BrandFormScreenState extends State<BrandFormScreen> {
   @override
   void dispose() {
     _companyController.dispose();
+    _businessTypeController.dispose();
+    _countryController.dispose();
+    _jobRoleController.dispose();
     super.dispose();
   }
 
@@ -68,7 +75,7 @@ class _BrandFormScreenState extends State<BrandFormScreen> {
                 const SizedBox(height: 12),
                 Center(
                   child: Text(
-                    'Primeiro, conte-nos sobre sua empresa. Depois, você adicionará os detalhes da marca.',
+                    'Conte-nos um pouco sobre a sua empresa antes de acessarmos os criadores.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 16,
@@ -79,45 +86,50 @@ class _BrandFormScreenState extends State<BrandFormScreen> {
                 const SizedBox(height: 40),
 
                 // Company Name
-                _buildLabel('Company name *'),
+                _buildLabel('Nome da empresa *'),
                 TextFormField(
                   controller: _companyController,
-                  decoration: _inputDecoration('Enter your company or agency name'),
+                  decoration: _inputDecoration('Digite o nome da sua marca ou agência'),
                   validator: (value) => value == null || value.isEmpty ? 'Campo obrigatório' : null,
                 ),
                 const SizedBox(height: 24),
 
                 // Business Type
-                _buildLabel('Business type *'),
-                DropdownButtonFormField<String>(
-                  value: _businessType,
-                  hint: const Text('Select business type'),
-                  decoration: _inputDecoration(''),
-                  items: _businessTypes.map((type) => DropdownMenuItem(value: type, child: Text(type))).toList(),
-                  onChanged: (val) => setState(() => _businessType = val),
-                  validator: (value) => value == null ? 'Campo obrigatório' : null,
+                _buildLabel('Tipo de negócio *'),
+                TextFormField(
+                  controller: _businessTypeController,
+                  readOnly: true,
+                  decoration: _inputDecoration('Selecione o tipo', Icons.arrow_drop_down),
+                  onTap: () {
+                    _showBottomSheetPicker('Selecione o tipo', _businessTypes, _businessTypeController, (val) => _businessType = val);
+                  },
+                  validator: (value) => value == null || value.isEmpty ? 'Campo obrigatório' : null,
                 ),
                 const SizedBox(height: 24),
 
                 // Country
-                _buildLabel('Country *'),
-                DropdownButtonFormField<String>(
-                  value: _country,
-                  decoration: _inputDecoration(''),
-                  items: _countries.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
-                  onChanged: (val) => setState(() => _country = val ?? 'Brasil'),
+                _buildLabel('País *'),
+                TextFormField(
+                  controller: _countryController,
+                  readOnly: true,
+                  decoration: _inputDecoration('Selecione o país', Icons.arrow_drop_down),
+                  onTap: () {
+                    _showBottomSheetPicker('Selecione o país', _countries, _countryController, (val) => _country = val);
+                  },
+                  validator: (value) => value == null || value.isEmpty ? 'Campo obrigatório' : null,
                 ),
                 const SizedBox(height: 24),
 
                 // Job Role
-                _buildLabel('Job role *'),
-                DropdownButtonFormField<String>(
-                  value: _jobRole,
-                  hint: const Text('Select role'),
-                  decoration: _inputDecoration(''),
-                  items: _roles.map((r) => DropdownMenuItem(value: r, child: Text(r))).toList(),
-                  onChanged: (val) => setState(() => _jobRole = val),
-                  validator: (value) => value == null ? 'Campo obrigatório' : null,
+                _buildLabel('Seu cargo *'),
+                TextFormField(
+                  controller: _jobRoleController,
+                  readOnly: true,
+                  decoration: _inputDecoration('Selecione seu cargo', Icons.arrow_drop_down),
+                  onTap: () {
+                    _showBottomSheetPicker('Selecione seu cargo', _roles, _jobRoleController, (val) => _jobRole = val);
+                  },
+                  validator: (value) => value == null || value.isEmpty ? 'Campo obrigatório' : null,
                 ),
                 const SizedBox(height: 48),
 
@@ -132,7 +144,7 @@ class _BrandFormScreenState extends State<BrandFormScreen> {
                     ),
                   ),
                   child: const Text(
-                    'Continue',
+                    'Continuar',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                   ),
                 ),
@@ -142,6 +154,50 @@ class _BrandFormScreenState extends State<BrandFormScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  void _showBottomSheetPicker(String title, List<String> items, TextEditingController controller, Function(String) onSelected) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (context) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                ),
+                Flexible(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: items.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(items[index]),
+                        onTap: () {
+                          setState(() {
+                            controller.text = items[index];
+                          });
+                          onSelected(items[index]);
+                          Navigator.pop(context);
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -155,11 +211,12 @@ class _BrandFormScreenState extends State<BrandFormScreen> {
     );
   }
 
-  InputDecoration _inputDecoration(String hint) {
+  InputDecoration _inputDecoration(String hint, [IconData? suffixIcon]) {
     return InputDecoration(
       hintText: hint,
       filled: true,
       fillColor: Colors.white,
+      suffixIcon: suffixIcon != null ? Icon(suffixIcon, color: Colors.grey) : null,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide(color: Colors.grey.shade300),

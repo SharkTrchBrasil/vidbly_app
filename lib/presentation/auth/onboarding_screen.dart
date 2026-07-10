@@ -26,7 +26,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     },
     {
       "title": "Pagamento garantido",
-      "subtitle": "Saque seu dinheiro via PIX rapidamente assim que o vídeo for aprovado.",
+      "subtitle": "Receba seu dinheiro diretamente na sua conta bancária assim que o vídeo for aprovado.",
       "icon": "payments",
     }
   ];

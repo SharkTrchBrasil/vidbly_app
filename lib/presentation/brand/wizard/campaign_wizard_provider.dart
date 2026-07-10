@@ -56,8 +56,11 @@ class CampaignDraft {
   }
 }
 
-class CampaignWizardNotifier extends StateNotifier<CampaignDraft> {
-  CampaignWizardNotifier() : super(CampaignDraft());
+class CampaignWizardNotifier extends Notifier<CampaignDraft> {
+  @override
+  CampaignDraft build() {
+    return CampaignDraft();
+  }
 
   void updatePlatform(String platform) {
     // Modify default price or settings based on platform if needed
@@ -111,6 +114,6 @@ class CampaignWizardNotifier extends StateNotifier<CampaignDraft> {
   }
 }
 
-final campaignWizardProvider = StateNotifierProvider<CampaignWizardNotifier, CampaignDraft>((ref) {
+final campaignWizardProvider = NotifierProvider<CampaignWizardNotifier, CampaignDraft>(() {
   return CampaignWizardNotifier();
 });

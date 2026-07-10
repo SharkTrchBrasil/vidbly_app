@@ -20,8 +20,8 @@ class _SplashScreenState extends State<SplashScreen> {
     // Simulate checking token / auth state
     await Future.delayed(const Duration(seconds: 2));
     if (mounted) {
-      // For now, always route to onboarding
-      context.go('/onboarding');
+      // For now, skip onboarding and go straight to role selection
+      context.go('/role-selection');
     }
   }
 

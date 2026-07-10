@@ -2,12 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter/foundation.dart';
 import 'core/theme/app_theme.dart';
 import 'core/routing/app_router.dart';
+import 'l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  try {
+    await Firebase.initializeApp();
+  } catch (e) {
+    debugPrint('Firebase init failed: \$e');
+  }
   await dotenv.load(fileName: "assets/.env");
   runApp(
     const ProviderScope(
@@ -28,6 +34,8 @@ class VidblyApp extends ConsumerWidget {
       theme: AppTheme.lightTheme, // Swappy-like modern theme
       routerConfig: router,
       debugShowCheckedModeBanner: false,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
     );
   }
 }
