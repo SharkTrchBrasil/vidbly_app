@@ -10,6 +10,12 @@ import '../../presentation/auth/creator_form_screen.dart';
 import '../../presentation/auth/pitch_video_upload_screen.dart';
 import '../../presentation/creator/main_creator_screen.dart';
 import '../../presentation/brand/main_brand_screen.dart';
+import '../../presentation/brand/wizard/step_0_platform_screen.dart';
+import '../../presentation/brand/wizard/step_1_product_screen.dart';
+import '../../presentation/brand/wizard/step_2_video_screen.dart';
+import '../../presentation/brand/wizard/step_3_addons_screen.dart';
+import '../../presentation/brand/wizard/step_4_visibility_screen.dart';
+import '../../presentation/brand/wizard/step_5_checkout_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -54,6 +60,30 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/brand-dashboard',
         builder: (context, state) => const MainBrandScreen(),
+      ),
+      GoRoute(
+        path: '/brand-dashboard/wizard/step0',
+        builder: (context, state) => const Step0PlatformScreen(),
+      ),
+      GoRoute(
+        path: '/brand-dashboard/wizard/step1',
+        builder: (context, state) => const Step1ProductScreen(),
+      ),
+      GoRoute(
+        path: '/brand-dashboard/wizard/step2',
+        builder: (context, state) => const Step2VideoScreen(),
+      ),
+      GoRoute(
+        path: '/brand-dashboard/wizard/step3',
+        builder: (context, state) => const Step3AddonsScreen(),
+      ),
+      GoRoute(
+        path: '/brand-dashboard/wizard/step4',
+        builder: (context, state) => const Step4VisibilityScreen(),
+      ),
+      GoRoute(
+        path: '/brand-dashboard/wizard/step5',
+        builder: (context, state) => const Step5CheckoutScreen(),
       ),
     ],
   );
