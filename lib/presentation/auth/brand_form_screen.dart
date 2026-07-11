@@ -1,34 +1,54 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/app_theme.dart';
+import '../../data/repositories/brand_repository.dart';
 
-class BrandFormScreen extends StatefulWidget {
+class BrandFormScreen extends ConsumerStatefulWidget {
   const BrandFormScreen({super.key});
 
   @override
-  State<BrandFormScreen> createState() => _BrandFormScreenState();
+  ConsumerState<BrandFormScreen> createState() => _BrandFormScreenState();
 }
 
-class _BrandFormScreenState extends State<BrandFormScreen> {
+class _BrandFormScreenState extends ConsumerState<BrandFormScreen> {
   final _formKey = GlobalKey<FormState>();
   
   final _companyController = TextEditingController();
   String? _businessType;
-  String _country = 'Brasil';
   String? _jobRole;
 
   final _businessTypeController = TextEditingController();
-  final _countryController = TextEditingController(text: 'Brasil');
   final _jobRoleController = TextEditingController();
+  final _contactNameController = TextEditingController();
+  final _contactPhoneController = TextEditingController();
 
   final List<String> _businessTypes = ['Marca Própria', 'Agência', 'Empresa Multi-Marca'];
-  final List<String> _countries = ['Brasil', 'Estados Unidos', 'Portugal', 'Espanha', 'Outro'];
   final List<String> _roles = ['Fundador / CEO', 'Gerente de Marketing', 'Diretor Criativo', 'Outro'];
 
-  void _submitForm() {
+  bool _isLoading = false;
+
+  Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      // TODO: Salvar dados no Firebase/Python Backend
-      context.go('/brand-dashboard');
+      setState(() => _isLoading = true);
+      try {
+        final repo = ref.read(brandRepositoryProvider);
+        await repo.createMyProfile({
+          'company_name': _companyController.text,
+          'website': '', // optional
+          'industry': _businessTypeController.text,
+          'bio': '', // optional
+          'contact_name': _contactNameController.text,
+          'contact_phone': _contactPhoneController.text,
+        });
+        if (mounted) context.go('/brand-dashboard');
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro: $e')));
+        }
+      } finally {
+        if (mounted) setState(() => _isLoading = false);
+      }
     }
   }
 
@@ -36,8 +56,9 @@ class _BrandFormScreenState extends State<BrandFormScreen> {
   void dispose() {
     _companyController.dispose();
     _businessTypeController.dispose();
-    _countryController.dispose();
     _jobRoleController.dispose();
+    _contactNameController.dispose();
+    _contactPhoneController.dispose();
     super.dispose();
   }
 
@@ -107,15 +128,21 @@ class _BrandFormScreenState extends State<BrandFormScreen> {
                 ),
                 const SizedBox(height: 24),
 
-                // Country
-                _buildLabel('País *'),
+                // Contact Name
+                _buildLabel('Nome do Responsável *'),
                 TextFormField(
-                  controller: _countryController,
-                  readOnly: true,
-                  decoration: _inputDecoration('Selecione o país', Icons.arrow_drop_down),
-                  onTap: () {
-                    _showBottomSheetPicker('Selecione o país', _countries, _countryController, (val) => _country = val);
-                  },
+                  controller: _contactNameController,
+                  decoration: _inputDecoration('Quem vai gerenciar a conta?'),
+                  validator: (value) => value == null || value.isEmpty ? 'Campo obrigatório' : null,
+                ),
+                const SizedBox(height: 24),
+
+                // Contact Phone
+                _buildLabel('Celular / WhatsApp *'),
+                TextFormField(
+                  controller: _contactPhoneController,
+                  keyboardType: TextInputType.phone,
+                  decoration: _inputDecoration('(00) 00000-0000'),
                   validator: (value) => value == null || value.isEmpty ? 'Campo obrigatório' : null,
                 ),
                 const SizedBox(height: 24),
@@ -134,20 +161,22 @@ class _BrandFormScreenState extends State<BrandFormScreen> {
                 const SizedBox(height: 48),
 
                 // Submit Button
-                ElevatedButton(
-                  onPressed: _submitForm,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black, // Estilo Billo (Preto)
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
-                  child: const Text(
-                    'Continuar',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
-                  ),
-                ),
+                _isLoading 
+                    ? const Center(child: CircularProgressIndicator())
+                    : ElevatedButton(
+                        onPressed: _submitForm,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                        child: const Text(
+                          'Continuar',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                        ),
+                      ),
                 const SizedBox(height: 24),
               ],
             ),

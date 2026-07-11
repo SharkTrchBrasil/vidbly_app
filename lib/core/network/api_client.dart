@@ -1,8 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 // Provides the base Dio instance
 final dioProvider = Provider<Dio>((ref) {
@@ -16,11 +17,11 @@ final dioProvider = Provider<Dio>((ref) {
   dio.interceptors.add(
     InterceptorsWrapper(
       onRequest: (options, handler) async {
-        // TODO: Inject Auth Token here
-        // String? token = await getAuthToken();
-        // if (token != null) {
-        //   options.headers['Authorization'] = 'Bearer $token';
-        // }
+        final prefs = await SharedPreferences.getInstance();
+        final token = prefs.getString('access_token');
+        if (token != null) {
+          options.headers['Authorization'] = 'Bearer $token';
+        }
         
         if (kDebugMode) {
           print('REQUEST[${options.method}] => PATH: ${options.path}');

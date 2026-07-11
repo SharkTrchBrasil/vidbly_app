@@ -3,17 +3,22 @@ import '../../data/models/creator_wallet_model.dart';
 import '../../data/models/notification_model.dart';
 import 'auth_provider.dart';
 
+import '../../data/repositories/creator_repository.dart';
+import '../../data/repositories/notification_repository.dart';
+
 final creatorWalletProvider = FutureProvider<CreatorWalletModel?>((ref) async {
   final user = await ref.watch(currentUserProvider.future);
   if (user == null || user.userType != 'creator') return null;
   
-  // TODO: Call WalletRepository to get creator wallet
+  final repository = ref.watch(creatorRepositoryProvider);
+  final profile = await repository.getMyProfile();
+  
   return CreatorWalletModel(
-    id: "wallet-1",
-    creatorId: user.id,
-    availableBalance: 1500.0,
-    createdAt: DateTime.now(),
-    updatedAt: DateTime.now(),
+    id: "wallet-${profile.id}",
+    creatorId: profile.userId,
+    availableBalance: profile.totalEarned,
+    createdAt: profile.createdAt,
+    updatedAt: profile.updatedAt,
   );
 });
 
@@ -21,6 +26,6 @@ final notificationsProvider = FutureProvider<List<NotificationModel>>((ref) asyn
   final user = await ref.watch(currentUserProvider.future);
   if (user == null) return [];
   
-  // TODO: Call NotificationRepository
-  return [];
+  final repository = ref.watch(notificationRepositoryProvider);
+  return repository.getNotifications();
 });

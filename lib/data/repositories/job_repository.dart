@@ -24,13 +24,20 @@ class JobRepository {
     return (response.data as List).map((e) => JobModel.fromJson(e)).toList();
   }
 
+  Future<JobModel> getJobById(String id) async {
+    final response = await _dio.get('/jobs/$id');
+    return JobModel.fromJson(response.data);
+  }
+
   Future<JobApplicationModel> applyForJob(String jobId, Map<String, dynamic> data) async {
-    final response = await _dio.post('/applications/job/$jobId', data: data);
+    final payload = {...data, 'job_id': jobId};
+    final response = await _dio.post('/applications', data: payload);
     return JobApplicationModel.fromJson(response.data);
   }
 
   Future<VideoDeliveryModel> submitVideo(String jobId, Map<String, dynamic> data) async {
-    final response = await _dio.post('/deliveries/job/$jobId', data: data);
+    final payload = {...data, 'job_id': jobId};
+    final response = await _dio.post('/deliveries', data: payload);
     return VideoDeliveryModel.fromJson(response.data);
   }
 }

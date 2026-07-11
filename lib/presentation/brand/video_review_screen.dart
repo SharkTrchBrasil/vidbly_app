@@ -19,30 +19,58 @@ class VideoReviewScreen extends StatelessWidget {
             child: Container(
               color: Colors.black,
               child: const Center(
-                child: Icon(Icons.video_library, size: 64, color: Colors.white54),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.video_library, size: 64, color: Colors.white54),
+                    SizedBox(height: 16),
+                    Text('Vídeo com Marca d\'Água (Preview)', style: TextStyle(color: Colors.white54)),
+                  ],
+                ),
               ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(24.0),
-            child: Row(
+            child: Column(
               children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () {},
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.red,
-                      side: const BorderSide(color: Colors.red),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () {},
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: Colors.red,
+                          side: const BorderSide(color: Colors.red),
+                        ),
+                        child: const Text('Pedir Revisão'),
+                      ),
                     ),
-                    child: const Text('Pedir Revisão'),
-                  ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                        child: const Text('Aprovar', style: TextStyle(color: Colors.white)),
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                    child: const Text('Aprovar', style: TextStyle(color: Colors.white)),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Baixando vídeo original sem marca d\'água...')),
+                      );
+                    },
+                    icon: const Icon(Icons.download),
+                    label: const Text('Baixar Vídeo Original (Apenas Aprovado)'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      foregroundColor: Colors.white,
+                    ),
                   ),
                 ),
               ],

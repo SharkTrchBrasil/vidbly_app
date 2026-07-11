@@ -13,12 +13,12 @@ class ProductRepository {
   ProductRepository(this._dio);
 
   Future<List<ProductModel>> getMyProducts() async {
-    final response = await _dio.get('/products');
+    final response = await _dio.get('/products/');
     return (response.data as List).map((e) => ProductModel.fromJson(e)).toList();
   }
 
   Future<ProductModel> createProduct(Map<String, dynamic> data) async {
-    final response = await _dio.post('/products', data: data);
+    final response = await _dio.post('/products/', data: data);
     return ProductModel.fromJson(response.data);
   }
 

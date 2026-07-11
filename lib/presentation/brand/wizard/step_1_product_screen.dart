@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../data/repositories/product_repository.dart';
 import 'campaign_wizard_provider.dart';
 
 class Step1ProductScreen extends ConsumerStatefulWidget {
@@ -82,8 +83,41 @@ class _Step1ProductScreenState extends ConsumerState<Step1ProductScreen> {
               
               const SizedBox(height: 24),
               OutlinedButton.icon(
-                onPressed: () {
-                  // TODO: Integração com "My Catalog"
+                onPressed: () async {
+                  try {
+                    final repo = ref.read(productRepositoryProvider);
+                    final products = await repo.getMyProducts();
+                    if (!mounted) return;
+                    
+                    if (products.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Seu catálogo está vazio.')));
+                      return;
+                    }
+                    
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (ctx) {
+                        return ListView.builder(
+                          itemCount: products.length,
+                          itemBuilder: (ctx, index) {
+                            final product = products[index];
+                            return ListTile(
+                              title: Text(product.name),
+                              subtitle: Text(product.url ?? 'Sem URL'),
+                              onTap: () {
+                                if (product.url != null) {
+                                  setState(() => _urlController.text = product.url!);
+                                }
+                                Navigator.pop(ctx);
+                              },
+                            );
+                          },
+                        );
+                      }
+                    );
+                  } catch (e) {
+                    if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro: $e')));
+                  }
                 },
                 icon: const Icon(Icons.inventory_2_outlined),
                 label: const Text('Escolher do Catálogo'),

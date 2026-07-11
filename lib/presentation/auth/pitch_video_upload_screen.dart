@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/app_theme.dart';
+import '../../data/repositories/creator_repository.dart';
 
-class PitchVideoUploadScreen extends StatelessWidget {
+class PitchVideoUploadScreen extends ConsumerStatefulWidget {
   const PitchVideoUploadScreen({super.key});
+
+  @override
+  ConsumerState<PitchVideoUploadScreen> createState() => _PitchVideoUploadScreenState();
+}
+
+class _PitchVideoUploadScreenState extends ConsumerState<PitchVideoUploadScreen> {
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -84,13 +93,29 @@ class PitchVideoUploadScreen extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(24.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  // MOCK COMPLETE ONBOARDING
-                  context.go('/dashboard');
-                },
-                child: const Text("Concluir Cadastro"),
-              ),
+              child: _isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : ElevatedButton(
+                      onPressed: () async {
+                        setState(() => _isLoading = true);
+                        try {
+                          final repo = ref.read(creatorRepositoryProvider);
+                          await repo.createMyProfile({
+                            'first_name': 'New', // Should come from form
+                            'last_name': 'Creator',
+                            'country': 'Brasil',
+                          });
+                          if (mounted) context.go('/creator-dashboard');
+                        } catch (e) {
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro: $e')));
+                          }
+                        } finally {
+                          if (mounted) setState(() => _isLoading = false);
+                        }
+                      },
+                      child: const Text("Concluir Cadastro"),
+                    ),
             ),
           ],
         ),

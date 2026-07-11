@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../providers/auth_provider.dart';
 
-class BrandMenuScreen extends StatelessWidget {
+class BrandMenuScreen extends ConsumerWidget {
   const BrandMenuScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       backgroundColor: AppTheme.background,
       appBar: AppBar(
@@ -19,7 +22,9 @@ class BrandMenuScreen extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.wallet, color: AppTheme.primary),
             title: const Text('Wallet', style: TextStyle(fontWeight: FontWeight.w500)),
-            onTap: () {},
+            onTap: () {
+              context.push('/brand-wallet');
+            },
           ),
           ListTile(
             leading: const Icon(Icons.person_outline, color: AppTheme.primary),
@@ -40,7 +45,12 @@ class BrandMenuScreen extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.redAccent),
             title: const Text('Logout', style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.w500)),
-            onTap: () {},
+            onTap: () async {
+              await ref.read(authProvider.notifier).logout();
+              if (context.mounted) {
+                context.go('/login');
+              }
+            },
           ),
         ],
       ),

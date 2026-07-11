@@ -37,4 +37,11 @@ class CreatorRepository {
     final response = await _dio.get('/discover/me/services');
     return (response.data as List).map((e) => CreatorServiceModel.fromJson(e)).toList();
   }
+
+  Future<CreatorProfileModel> getCreatorById(String id) async {
+    // Assuming backend has this endpoint, otherwise this will fail
+    final response = await _dio.get('/creators/$id');
+    return CreatorProfileModel.fromJson(response.data);
+  }
 }
+

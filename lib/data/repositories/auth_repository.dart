@@ -25,7 +25,7 @@ class AuthRepository {
       'password': password,
     });
     
-    final response = await _dio.post('/auth/token', data: formData);
+    final response = await _dio.post('/auth/login', data: formData);
     return response.data; // contains access_token
   }
 
@@ -63,4 +63,10 @@ class AuthRepository {
       rethrow;
     }
   }
+
+  Future<UserModel> getCurrentUser() async {
+    final response = await _dio.get('/auth/me');
+    return UserModel.fromJson(response.data);
+  }
 }
+

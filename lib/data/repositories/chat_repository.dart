@@ -12,6 +12,14 @@ class ChatRepository {
 
   ChatRepository(this._dio);
 
+  Future<List<dynamic>> getChatRooms() async {
+    // Retorna a lista de salas
+    // Mudar para o modelo ChatRoomModel quando for criado
+    final response = await _dio.get('/chat-rooms');
+    return (response.data as List);
+  }
+
+
   Future<List<ChatMessageModel>> getMessagesByJob(String jobId) async {
     final response = await _dio.get('/chat/job/$jobId');
     return (response.data as List).map((e) => ChatMessageModel.fromJson(e)).toList();

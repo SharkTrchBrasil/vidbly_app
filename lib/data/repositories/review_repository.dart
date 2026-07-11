@@ -1,15 +1,20 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/network/api_client.dart';
 import '../models/review_model.dart';
 
-class ReviewRepository {
-  final ApiClient _apiClient;
+final reviewRepositoryProvider = Provider<ReviewRepository>((ref) {
+  return ReviewRepository(ref.watch(dioProvider));
+});
 
-  ReviewRepository(this._apiClient);
+class ReviewRepository {
+  final Dio _dio;
+
+  ReviewRepository(this._dio);
 
   Future<List<ReviewModel>> getReviews(String creatorId) async {
     try {
-      final response = await _apiClient.dio.get('/reviews', queryParameters: {'creator_id': creatorId});
+      final response = await _dio.get('/reviews', queryParameters: {'creator_id': creatorId});
       return (response.data as List).map((e) => ReviewModel.fromJson(e)).toList();
     } catch (e) {
       throw Exception('Failed to get reviews: $e');
@@ -18,7 +23,7 @@ class ReviewRepository {
 
   Future<ReviewModel> createReview(Map<String, dynamic> data) async {
     try {
-      final response = await _apiClient.dio.post('/reviews', data: data);
+      final response = await _dio.post('/reviews', data: data);
       return ReviewModel.fromJson(response.data);
     } catch (e) {
       throw Exception('Failed to create review: $e');

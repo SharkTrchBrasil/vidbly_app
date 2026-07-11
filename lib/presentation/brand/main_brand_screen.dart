@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/app_theme.dart';
 import 'brand_discover_screen.dart';
+import 'tabs/brand_campaigns_screen.dart';
+import 'tabs/brand_chat_screen.dart';
+import 'tabs/brand_menu_screen.dart';
 
 class MainBrandScreen extends StatefulWidget {
   const MainBrandScreen({super.key});
@@ -15,10 +18,10 @@ class _MainBrandScreenState extends State<MainBrandScreen> {
 
   final List<Widget> _screens = [
     const BrandDiscoverScreen(),
-    const Center(child: Text('Meus Pedidos', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
+    const BrandCampaignsScreen(),
     const SizedBox.shrink(), // Espaço vazio para o FAB central
-    const Center(child: Text('Mensagens', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
-    const Center(child: Text('Perfil', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
+    const BrandChatScreen(),
+    const BrandMenuScreen(),
   ];
 
   @override

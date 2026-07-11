@@ -13,7 +13,7 @@ class WalletRepository {
   WalletRepository(this._dio);
 
   Future<BrandWalletModel> getWallet() async {
-    final response = await _dio.get('/wallet');
+    final response = await _dio.get('/wallet/');
     return BrandWalletModel.fromJson(response.data);
   }
 

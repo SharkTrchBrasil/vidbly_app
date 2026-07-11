@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/app_theme.dart';
+import '../providers/discover_provider.dart';
+import '../../data/models/creator_profile_model.dart';
 
-class BrandDiscoverScreen extends StatefulWidget {
+class BrandDiscoverScreen extends ConsumerStatefulWidget {
   const BrandDiscoverScreen({super.key});
 
   @override
-  State<BrandDiscoverScreen> createState() => _BrandDiscoverScreenState();
+  ConsumerState<BrandDiscoverScreen> createState() => _BrandDiscoverScreenState();
 }
 
-class _BrandDiscoverScreenState extends State<BrandDiscoverScreen> {
+class _BrandDiscoverScreenState extends ConsumerState<BrandDiscoverScreen> {
   int _selectedFilterIndex = 0;
   final List<String> _filters = ['Todos', 'UGC', 'TikTok', 'Unboxing', 'Fitness', 'Beleza'];
 
@@ -81,18 +84,27 @@ class _BrandDiscoverScreenState extends State<BrandDiscoverScreen> {
 
           // Grid of Creators
           Expanded(
-            child: GridView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.65,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-              ),
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return const _CreatorCard();
+            child: ref.watch(featuredCreatorsProvider).when(
+              data: (creators) {
+                if (creators.isEmpty) {
+                  return const Center(child: Text('Nenhum criador encontrado.'));
+                }
+                return GridView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 0.65,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                  ),
+                  itemCount: creators.length,
+                  itemBuilder: (context, index) {
+                    return _CreatorCard(creator: creators[index]);
+                  },
+                );
               },
+              loading: () => const Center(child: CircularProgressIndicator(color: AppTheme.primary)),
+              error: (err, stack) => Center(child: Text('Erro: $err')),
             ),
           ),
         ],
@@ -102,13 +114,15 @@ class _BrandDiscoverScreenState extends State<BrandDiscoverScreen> {
 }
 
 class _CreatorCard extends StatelessWidget {
-  const _CreatorCard();
+  final CreatorProfileModel creator;
+  
+  const _CreatorCard({required this.creator});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.push('/creator-profile');
+        context.push('/creator-profile/${creator.userId}');
       },
       child: Container(
         decoration: BoxDecoration(
@@ -133,10 +147,15 @@ class _CreatorCard extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-                  child: Image.network(
-                    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
-                    fit: BoxFit.cover,
-                  ),
+                  child: creator.avatarUrl != null 
+                      ? Image.network(
+                          creator.avatarUrl!,
+                          fit: BoxFit.cover,
+                        )
+                      : Container(
+                          color: Colors.grey.shade200,
+                          child: const Icon(Icons.person, size: 48, color: Colors.grey),
+                        ),
                 ),
                 Positioned(
                   bottom: 8,
@@ -166,9 +185,9 @@ class _CreatorCard extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Ana Costa 🇧🇷',
-                        style: TextStyle(
+                      Text(
+                        '${creator.firstName} ${creator.lastName} 🇧🇷',
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                         ),
@@ -181,7 +200,7 @@ class _CreatorCard extends StatelessWidget {
                           const Icon(Icons.star, color: Colors.amber, size: 14),
                           const SizedBox(width: 4),
                           Text(
-                            '4.9',
+                            creator.rating.toStringAsFixed(1),
                             style: TextStyle(
                               fontSize: 12,
                               color: Colors.grey.shade600,
@@ -189,7 +208,7 @@ class _CreatorCard extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            ' (24)',
+                            ' (${creator.completedJobs})',
                             style: TextStyle(
                               fontSize: 12,
                               color: Colors.grey.shade500,
@@ -206,9 +225,9 @@ class _CreatorCard extends StatelessWidget {
                       color: AppTheme.primary.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Text(
-                      'A partir de R\$ 150',
-                      style: TextStyle(
+                    child: Text(
+                      'A partir de R\$ ${creator.organicPostPrice?.toStringAsFixed(0) ?? 150}',
+                      style: const TextStyle(
                         color: AppTheme.primary,
                         fontSize: 11,
                         fontWeight: FontWeight.bold,

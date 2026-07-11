@@ -57,7 +57,51 @@ class CreatorOffersScreen extends ConsumerWidget {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () {
-                            // TODO: Navigate to job detail
+                            showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                              ),
+                              builder: (ctx) {
+                                return SafeArea(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(24.0),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text('Detalhes da Campanha', style: Theme.of(context).textTheme.titleLarge),
+                                        const SizedBox(height: 16),
+                                        Text('Plataforma: ${job.platform}', style: const TextStyle(fontWeight: FontWeight.bold)),
+                                        const SizedBox(height: 8),
+                                        Text(job.description ?? 'Sem descrição.'),
+                                        const SizedBox(height: 16),
+                                        Row(
+                                          children: [
+                                            const Icon(Icons.attach_money, color: Colors.green),
+                                            Text('Pagamento: R\$ ${job.payoutAmount}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 24),
+                                        SizedBox(
+                                          width: double.infinity,
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              // Implementar aceite real futuramente
+                                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Interesse enviado com sucesso!')));
+                                              Navigator.pop(ctx);
+                                            },
+                                            style: ElevatedButton.styleFrom(backgroundColor: AppTheme.primary),
+                                            child: const Text('Tenho Interesse', style: TextStyle(color: Colors.white)),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppTheme.primary,

@@ -2,13 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../data/repositories/job_repository.dart';
 import 'campaign_wizard_provider.dart';
 
-class Step5CheckoutScreen extends ConsumerWidget {
+class Step5CheckoutScreen extends ConsumerStatefulWidget {
   const Step5CheckoutScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<Step5CheckoutScreen> createState() => _Step5CheckoutScreenState();
+}
+
+class _Step5CheckoutScreenState extends ConsumerState<Step5CheckoutScreen> {
+  bool _isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
     final draft = ref.watch(campaignWizardProvider);
 
     return Scaffold(
@@ -102,16 +110,35 @@ class Step5CheckoutScreen extends ConsumerWidget {
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(24.0),
-        child: ElevatedButton(
-          onPressed: () {
-            // TODO: Chamar API do Backend para salvar o Draft e processar/autorizar cartão
-            // Depois retornar ao Dashboard
-            context.go('/brand-dashboard');
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Campanha Publicada com Sucesso! 🚀')),
-            );
-          },
-          style: ElevatedButton.styleFrom(
+          child: _isLoading 
+            ? const Center(child: CircularProgressIndicator())
+            : ElevatedButton(
+                onPressed: () async {
+                  setState(() => _isLoading = true);
+                  try {
+                    final repo = ref.read(jobRepositoryProvider);
+                    await repo.createJob({
+                      'title': 'Nova Campanha UGC',
+                      'description': 'Campanha criada pelo wizard',
+                      'platform': 'tiktok',
+                      'payout_amount': 250.0,
+                    });
+                    
+                    if (mounted) {
+                      context.go('/brand-dashboard');
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Campanha Publicada com Sucesso! 🚀')),
+                      );
+                    }
+                  } catch (e) {
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro: $e')));
+                    }
+                  } finally {
+                    if (mounted) setState(() => _isLoading = false);
+                  }
+                },
+                style: ElevatedButton.styleFrom(
             backgroundColor: Colors.black, // Dark button as seen on Swappy
             padding: const EdgeInsets.symmetric(vertical: 16),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),

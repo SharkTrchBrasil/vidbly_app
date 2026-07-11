@@ -12,19 +12,23 @@ class CreatorFormScreen extends StatefulWidget {
 class _CreatorFormScreenState extends State<CreatorFormScreen> {
   final _formKey = GlobalKey<FormState>();
   
-  String? _selectedCountry;
   String? _selectedGender;
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _cpfController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
-  final TextEditingController _countryController = TextEditingController();
   final TextEditingController _genderController = TextEditingController();
 
-  final List<String> _countries = ['Brasil', 'Estados Unidos', 'Portugal', 'Outro'];
   final List<String> _genders = ['Masculino', 'Feminino', 'Outro', 'Prefiro não dizer'];
 
   @override
   void dispose() {
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _cpfController.dispose();
+    _phoneController.dispose();
     _dobController.dispose();
-    _countryController.dispose();
     _genderController.dispose();
     super.dispose();
   }
@@ -62,20 +66,65 @@ class _CreatorFormScreenState extends State<CreatorFormScreen> {
                       ),
                       const SizedBox(height: 40),
                       
-                      // Country Dropdown
-                      Text("Onde você mora?", style: Theme.of(context).textTheme.labelLarge),
+                      // Nome e Sobrenome
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Nome", style: Theme.of(context).textTheme.labelLarge),
+                                const SizedBox(height: 8),
+                                TextFormField(
+                                  controller: _firstNameController,
+                                  decoration: const InputDecoration(hintText: "Nome"),
+                                  validator: (val) => (val == null || val.isEmpty) ? "Obrigatório" : null,
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Sobrenome", style: Theme.of(context).textTheme.labelLarge),
+                                const SizedBox(height: 8),
+                                TextFormField(
+                                  controller: _lastNameController,
+                                  decoration: const InputDecoration(hintText: "Sobrenome"),
+                                  validator: (val) => (val == null || val.isEmpty) ? "Obrigatório" : null,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 24),
+
+                      // CPF
+                      Text("CPF (Para pagamentos)", style: Theme.of(context).textTheme.labelLarge),
                       const SizedBox(height: 8),
                       TextFormField(
-                        controller: _countryController,
-                        readOnly: true,
+                        controller: _cpfController,
                         decoration: const InputDecoration(
-                          hintText: "Selecione o país",
-                          suffixIcon: Icon(Icons.arrow_drop_down),
+                          hintText: "000.000.000-00",
                         ),
-                        onTap: () {
-                          _showBottomSheetPicker('Onde você mora?', _countries, _countryController, (val) => _selectedCountry = val);
-                        },
-                        validator: (val) => val == null || val.isEmpty ? "Obrigatório" : null,
+                        keyboardType: TextInputType.number,
+                        validator: (val) => (val == null || val.isEmpty) ? "Obrigatório" : null,
+                      ),
+                      const SizedBox(height: 24),
+
+                      // Celular
+                      Text("Celular / WhatsApp", style: Theme.of(context).textTheme.labelLarge),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: _phoneController,
+                        decoration: const InputDecoration(
+                          hintText: "(00) 00000-0000",
+                        ),
+                        keyboardType: TextInputType.phone,
+                        validator: (val) => (val == null || val.isEmpty) ? "Obrigatório" : null,
                       ),
                       const SizedBox(height: 24),
                       
